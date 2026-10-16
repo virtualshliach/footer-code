@@ -84,6 +84,20 @@ var SITES = {
     var r3 = await load('riverside', 'https://www.jewishriverside.com/', { coScript: '<script>window.Co={ArticleId:\'' + DRAFT + '\'}</script>' });
     ok(r3.d.getElementById('cf26'), 'Co.ArticleId fallback renders');
 
+    console.log('riverside: Sukkot page (past event, stays on)');
+    var SUK = 'https://www.jewishriverside.com/templates/articlecco_cdo/aid/7457011/jewish/Sukkot.htm';
+    /* the Sukkot overlay skins the native form, so give it the form's fields */
+    var FORM = '<form><input id="input_2" type="submit"><input id="input_59"><input id="input_60">' +
+      '<input id="first_62"><input id="last_62"><input id="input_72"><input id="input_73_full"></form>';
+    var sk = await load('riverside', SUK, { coScript: FORM, wait: 900 });
+    ok(projectRequests(sk).length === 1 && /riverside\/sukkot-5787\.js\?v=/.test(projectRequests(sk)[0]), 'loader fetched sukkot-5787.js');
+    ok(sk.d.getElementById('hh26'), 'Sukkot overlay rendered');
+    /* Sukkot keeps its cover under the full-screen overlay by design (same as when it was inline). */
+    ok(sk.errors.length === 0, 'no console errors on Sukkot page ' + (sk.errors.length ? JSON.stringify(sk.errors) : ''));
+    ok(sk.d.querySelectorAll('#hh26 .hh-tile').length >= 6, 'Sukkot tiles present (' + sk.d.querySelectorAll('#hh26 .hh-tile').length + ')');
+    var skr = await load('riverside', 'https://www.jewishriverside.com/templates/ArticleCcoResponse/aid/7457011/jewish/Sukkot.htm', { wait: 300 });
+    ok(projectRequests(skr).length === 1 && !skr.errors.length, 'Sukkot code also loads on its thank-you page');
+
     console.log('riverside: pages that must load nothing');
     var quiet = [
       ['https://www.jewishriverside.com/', 'site home'],
@@ -91,8 +105,7 @@ var SITES = {
       ['https://www.jewishriverside.com/article.asp?aid=4194665', 'donate page'],
       ['https://www.jewishriverside.com/article.asp?aid=75533870', 'look-alike aid'],
       ['https://www.jewishriverside.com/templates/ArticleCcoResponse/aid/' + DRAFT, 'response page'],
-      ['https://chanukahfestival.org/', 'brand domain (off during draft)'],
-      ['https://www.jewishriverside.com/article.asp?aid=7457011', 'old Sukkot page (archived)']
+      ['https://chanukahfestival.org/', 'brand domain (off during draft)']
     ];
     for (var i = 0; i < quiet.length; i++) {
       var q = await load('riverside', quiet[i][0], { wait: 250 });

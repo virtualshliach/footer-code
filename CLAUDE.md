@@ -11,7 +11,8 @@ real visitors within ~10 minutes (Pages caches for 10 min). Treat `main` as prod
   ChabadOne footer, once, and must never be renamed or moved.
 - `<site>/<project>.js` are project files, loaded by the loader only on the page ids
   listed in its `PAGES` map.
-- `<site>/archive/` holds retired code for reference. Never loaded.
+- Past events stay ON (their pages must keep their design). Do not remove a
+  project from `PAGES` unless Yudell says to.
 - `_template/footer.js` is the starting loader for a new site.
 - `tools/` holds tests; `tools/node_modules` is git-ignored.
 

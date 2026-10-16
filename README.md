@@ -19,7 +19,7 @@ file. Pages with no project download nothing else.
 
 | Folder | Site | Projects |
 |---|---|---|
-| `riverside/` | jewishriverside.com | `chanukah-2026.js` (draft, page 7553387) |
+| `riverside/` | jewishriverside.com | `chanukah-2026.js` (draft, page 7553387), `sukkot-5787.js` (page 7457011) |
 
 ## Adding a site
 

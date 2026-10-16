@@ -1,5 +1,6 @@
-/* ARCHIVED - not loaded. Sukkot & Simchat Torah 5787 overlay that ran inline in the
-   Riverside footer (aid 7457011) until Oct 2026. Kept as the starting point for next year. */
+/* Sukkot & Simchat Torah 5787 overlay - page 7457011. Loaded by riverside/footer.js.
+   The holiday is over but this stays ON so the page keeps its custom design.
+   Moved here from the inline footer in Oct 2026. */
 /* Sukkot & Simchat Torah 5787 - Chabad Jewish Center of Riverside */
 (function () {
 'use strict';
@@ -321,7 +322,8 @@ hidePageNow();
 if (document.readyState === 'loading') {
 document.addEventListener('DOMContentLoaded', boot);
 } else {
-boot();
+/* hosted file may arrive after the page loaded: wait until this whole file has run */
+setTimeout(boot, 0);
 }
 function hidePageNow() {
 if (document.getElementById('hh26-cover')) return;
