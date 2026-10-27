@@ -14,6 +14,10 @@ real visitors within ~10 minutes (Pages caches for 10 min). Treat `main` as prod
 - Past events stay ON (their pages must keep their design). Do not remove a
   project from `PAGES` unless Yudell says to.
 - `_template/footer.js` is the starting loader for a new site.
+- `chabadam/footer.js` also has `EVERY` (files loaded on every page) and `LIVE`.
+  While `LIVE` is false the redesign shows only in browsers opened with `?preview=1`
+  (`?preview=0` turns it off). Set `LIVE = true` only when Yudell says go live.
+  `chabadam/layout.js` is the readable source; there is no separate build step.
 - `tools/` holds tests; `tools/node_modules` is git-ignored.
 
 ## Rules
@@ -39,3 +43,4 @@ real visitors within ~10 minutes (Pages caches for 10 min). Treat `main` as prod
 | Folder | Site | Footer line |
 |---|---|---|
 | riverside | jewishriverside.com | `<script src="https://virtualshliach.github.io/footer-code/riverside/footer.js"></script>` |
+| chabadam | chabadam.org | `<script src="https://virtualshliach.github.io/footer-code/chabadam/footer.js"></script>` |

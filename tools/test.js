@@ -42,7 +42,7 @@ var SHELL = '<!doctype html><html><head><title>t</title></head><body class="cco_
 function load(site, url, opts) {
   opts = opts || {};
   var errors = [], logs = [], requests = [];
-  var html = SHELL + (opts.coScript || '') +
+  var html = (opts.shell || SHELL) + (opts.coScript || '') +
     '<script src="' + PAGES_BASE + site + '/footer.js"></script></body></html>';
   var dom = new JSDOM(html, {
     url: url, runScripts: 'dangerously', resources: makeLoader(requests), pretendToBeVisual: true,
@@ -62,7 +62,50 @@ function projectRequests(r) {
   return r.requests.filter(function (u) { return u.indexOf(PAGES_BASE) === 0 && !/\/footer\.js$/.test(u); });
 }
 
+var CAM_HOME = fs.readFileSync(path.join(__dirname, 'fixtures', 'chabadam-home.html'), 'utf8');
+var CAM_INNER = '<!doctype html><html><head><title>t</title></head><body class="lang_en dir_ltr cco_body sites-article">' +
+  '<div id="header"><div class="wrapper header-wrapper"><div class="clearfix branding-search"><div id="header_branding">' +
+  '<div class="float_left site-logo-wrapper"><a href="/"><img src="x.png"></a></div><a class="site_title" href="/">Chabad of Allen-McKinney</a>' +
+  '</div></div></div></div><div id="content">Article</div>' +
+  '<div id="footer"><div class="footer3">Chabad of Allen-McKinney \u2022 214.785.1830 \u2022 rabbi@chabadAM.org</div></div>';
+
 var SITES = {
+  chabadam: async function () {
+    var HOME = 'https://www.chabadam.org/';
+    console.log('chabadam: site redesign stays off for visitors until LIVE');
+    var off = await load('chabadam', HOME, { shell: CAM_HOME, wait: 400 });
+    ok(projectRequests(off).length === 0, 'plain visit: nothing loaded');
+    ok(!off.d.getElementById('cam-cover'), 'plain visit: homepage not covered');
+    ok(!/cam-home/.test(off.d.body.className) && !off.errors.length, 'plain visit: current site untouched');
+
+    console.log('chabadam: preview homepage (?preview=1)');
+    var r = await load('chabadam', HOME + '?preview=1', { shell: CAM_HOME, wait: 1500 });
+    ok(projectRequests(r).length === 1 && /chabadam\/layout\.js\?v=/.test(projectRequests(r)[0]), 'loader fetched layout.js with version stamp');
+    ok(/(^|\s)cam-home(\s|$)/.test(r.d.body.className), 'homepage rebuilt');
+    ok(!r.d.getElementById('cam-cover'), 'homepage cover removed after build');
+    ok(r.errors.length === 0, 'no console errors ' + (r.errors.length ? JSON.stringify(r.errors) : ''));
+    ok(r.logs.some(function (l) { return /\[footer-code\/chabadam\].* preview -> layout\.js/.test(l); }), 'loader log line');
+    ok(r.logs.some(function (l) { return /CAM layout v[\d.]+: running on homepage/.test(l); }), 'layout log line');
+    ['cam-hero', 'cam-prog', 'cam-band', 'cam-info', 'cam-mail'].forEach(function (c) {
+      ok(r.d.querySelector('.cam-home .' + c), 'section .' + c);
+    });
+    ok(r.d.querySelectorAll('.cam-plist li').length === 6, 'six programs listed');
+    ok(r.d.querySelector('.cam-pcap p') && /Evenings of learning/.test(r.d.querySelector('.cam-pcap p').textContent), 'program subtitle shown under the picture');
+    ok(r.d.querySelector('img.cam-logo') && /^data:image\/png/.test(r.d.querySelector('img.cam-logo').getAttribute('src')), 'logo in header');
+    ok(r.d.querySelector('.cam-footer'), 'footer rebuilt');
+    ok(r.d.querySelector('.cam-events') && r.d.querySelector('.cam-events').hidden, 'events section waits hidden when the events page cannot load');
+
+    console.log('chabadam: preview inner page');
+    var inner = await load('chabadam', 'https://www.chabadam.org/templates/articlecco_cdo/aid/6780908/jewish/Services.htm?preview=1', { shell: CAM_INNER, wait: 900 });
+    ok(projectRequests(inner).length === 1 && !inner.errors.length, 'layout.js loads on inner pages');
+    ok(inner.logs.some(function (l) { return /running on inner page/.test(l); }), 'inner page log line');
+    ok(inner.d.querySelector('.cam-footer') && !inner.d.querySelector('.cam-home'), 'inner page: header and footer only');
+
+    var gone = await load('chabadam', HOME + '?preview=0', { shell: CAM_HOME, wait: 300 });
+    ok(projectRequests(gone).length === 0, '?preview=0: nothing loaded');
+    var resp = await load('chabadam', 'https://www.chabadam.org/templates/ArticleCcoResponse/aid/7494889/jewish/x.htm?preview=1', { shell: CAM_INNER, wait: 300 });
+    ok(projectRequests(resp).length === 0, 'form thank-you pages left alone');
+  },
   riverside: async function () {
     var DRAFT = '7553387';
     console.log('riverside: draft Chanukah page');

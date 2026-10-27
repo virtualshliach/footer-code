@@ -13,13 +13,15 @@ points at that folder's `footer.js`:
 ```
 
 `footer.js` checks which page the visitor is on and loads only that page's project
-file. Pages with no project download nothing else.
+file. Pages with no project download nothing else. A site can also list files that
+load on every page (`EVERY`, used for a whole-site redesign).
 
 ## Sites
 
 | Folder | Site | Projects |
 |---|---|---|
 | `riverside/` | jewishriverside.com | `chanukah-2026.js` (draft, page 7553387), `sukkot-5787.js` (page 7457011) |
+| `chabadam/` | chabadam.org | `layout.js` (site redesign, every page; preview-only until `LIVE = true`) |
 
 ## Adding a site
 
