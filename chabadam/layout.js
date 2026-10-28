@@ -19,7 +19,7 @@
    ========================================================================== */
 (function () {
   "use strict";
-  var VERSION = "2.3.1";
+  var VERSION = "2.3.2";
   if (window.CAM_LAYOUT) return;
   window.CAM_LAYOUT = VERSION;
 
@@ -118,7 +118,13 @@
 
     "@media (min-width:1025px){",
     /* wordmark | centred menu | Donate */
-    "$S #header .header-wrapper{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:'b c d';align-items:center;column-gap:24px}",
+    /* same 1180px column as the page below, so the logo lines up with the hero
+       text and Donate with the hero arrows */
+    "$S #header .header-wrapper{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:'b c d';align-items:center;column-gap:40px;max-width:1180px;margin-left:auto;margin-right:auto;padding-left:40px;padding-right:40px;box-sizing:border-box}",
+    /* the theme gives the menu table a fixed 80px height inside a 60px box,
+       which pushed the menu text below the logo and Donate */
+    "$S #header .site-nav-wrapper,$S #header #co_menu_container_wrapper,$S #header #co_menu_container{height:auto;min-height:0}",
+    "$S #header table.main_menu_container,$S #header #tabContentMain,$S #header #tabContentMain > td.co_menu_item{height:auto;vertical-align:middle}",
     "$S #header .header-wrapper > .branding-search{grid-area:b}",
     "$S #header .header-wrapper > .site-nav-wrapper{grid-area:c;justify-self:center;width:auto}",
     "$S #header .header-wrapper > .cam-donate{grid-area:d;justify-self:end;display:inline-flex}",
@@ -231,7 +237,7 @@
     "$H .cam-hero .cam-arrows{display:flex;gap:8px;margin-left:auto}",
     "$H .cam-hero .cam-arrows button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer;padding:0}",
     "$H .cam-hero .cam-arrows button:hover{background-color:#fff;color:{navy}}",
-    "$H .cam-hero .cam-slide.is-on.is-zoom{animation:camZoom 9s ease-out both}",
+    "$H .cam-hero .cam-slide.is-on.is-zoom{animation:camZoom 8s cubic-bezier(.2,.6,.3,1) both}",
     "@media (max-width:767px){",
     "$H .cam-hero{height:86vh;min-height:540px}",
     "$H .cam-hero .cam-hcopy{bottom:110px}",
@@ -414,7 +420,7 @@
   var CSS_COVER = "html body.home .hp-table{visibility:hidden}";
 
   var CSS_RAW = [
-    "@keyframes camZoom{from{transform:scale(1.08)}to{transform:scale(1)}}",
+    "@keyframes camZoom{from{transform:scale(1.12)}to{transform:scale(1)}}",
     "@keyframes camBar{from{width:0}to{width:100%}}"
   ].join("\n");
 

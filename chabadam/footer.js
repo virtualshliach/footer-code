@@ -8,7 +8,7 @@
 (function () {
   'use strict';
   var SITE = 'chabadam';
-  var V = '2026-10-27b';
+  var V = '2026-10-27c';
 
   /* Site redesign. While LIVE is false only browsers that opened the site with
      ?preview=1 see it (remembered in that browser; ?preview=0 turns it off).
