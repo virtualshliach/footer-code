@@ -19,7 +19,7 @@
    ========================================================================== */
 (function () {
   "use strict";
-  var VERSION = "2.3.3";
+  var VERSION = "2.3.4";
   if (window.CAM_LAYOUT) return;
   window.CAM_LAYOUT = VERSION;
 
@@ -842,6 +842,40 @@
     "}"
   ];
 
+  /* ---- phones: tighter spacing, shorter hero, compact event cards -------
+     Comes after every other homepage block so it wins on small screens. */
+  var CSS_PHONE_TIGHT = [
+    "@media (max-width:767px){",
+    "$H .cam-sec{padding:48px 0}",
+    "$H .cam-head{margin-bottom:24px}",
+    "$H .cam-eyebrow{margin-bottom:10px}",
+    "$H .cam-h2{font-size:34px}",
+    "$H .cam-hero{height:64vh;min-height:420px}",
+    "$H .cam-hero .cam-hcopy{bottom:92px}",
+    "$H .cam-hero .cam-htitle{font-size:36px;margin-bottom:16px}",
+    "$H .cam-hero .cam-hctl{bottom:24px}",
+    "$H .cam-band .cam-bitem{padding:24px 0;gap:12px}",
+    "$H .cam-band .cam-bitem:first-child{padding-top:0}",
+    "$H .cam-band .cam-btitle{font-size:30px}",
+    "$H .cam-info{padding-bottom:110px}",
+    "$H .cam-info .cam-icol{padding-top:24px;margin-top:24px}",
+    "$H .cam-info .cam-icol:first-child{padding-top:0;margin-top:0}",
+    "$H .cam-mail{margin-top:-70px;padding-bottom:48px}",
+    "$H .cam-events .cam-etrack{grid-auto-columns:80%;gap:12px}",
+    "$H .cam-events .cam-ebody{padding:16px}",
+    "$H .cam-events .cam-etitle{font-size:21px;margin-bottom:6px}",
+    "$H .cam-events .cam-edesc{font-size:14px;line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}",
+    "$H .cam-events .cam-erows{margin:0 0 14px}",
+    "$H .cam-events .cam-erow{padding:7px 0;font-size:13px}",
+    "$H .cam-events .cam-ersvp{height:42px}",
+    "$H .cam-events .cam-ecal{gap:6px;margin-top:6px}",
+    "$H .cam-events .cam-ecal a{height:36px}",
+    "$H .cam-events .cam-ebar{margin-top:18px}",
+    "$H .cam-events .cam-eall{margin-top:18px}",
+    "$H .cam-events .cam-edate{top:12px;padding:7px 12px;font-size:11px}",
+    "}"
+  ];
+
   function calIcon() {
     return '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
   }
@@ -1142,7 +1176,7 @@
     try {
       addFonts();
       var blocks = [CSS_HEADER, CSS_INNER, CSS_FOOTER];
-      if (IS_HOME) blocks = blocks.concat([CSS_HOME, CSS_HERO, CSS_PROGRAMS, CSS_EVENTS, CSS_BAND, CSS_MID, CSS_INFO]);
+      if (IS_HOME) blocks = blocks.concat([CSS_HOME, CSS_HERO, CSS_PROGRAMS, CSS_EVENTS, CSS_BAND, CSS_MID, CSS_INFO, CSS_PHONE_TIGHT]);
       var css = [];
       for (var i = 0; i < blocks.length; i++) css.push(fill(blocks[i]));
       addStyle("cam-style", important(css.join("\n")) + "\n" + CSS_RAW);
