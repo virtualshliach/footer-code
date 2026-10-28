@@ -19,7 +19,7 @@
    ========================================================================== */
 (function () {
   "use strict";
-  var VERSION = "2.3.2";
+  var VERSION = "2.3.3";
   if (window.CAM_LAYOUT) return;
   window.CAM_LAYOUT = VERSION;
 
@@ -109,6 +109,8 @@
     "$S.cam-has-logo #header_branding .site_title{display:none}",
     "$S.cam-has-logo #header_branding .site-logo-wrapper img:not(.cam-logo){display:none}",
     "$S #header_branding .site-logo-wrapper{float:none;margin:0;padding:0;width:auto;height:auto;background:none;border:0;border-radius:0;box-shadow:none;overflow:visible}",
+    /* phones: the theme hides the logo and shows the text title instead */
+    "$S.cam-has-logo #header_branding .site-logo-wrapper{display:block}",
     "$S #header_branding .site-logo-wrapper a{display:block;line-height:0}",
     "$S #header_branding img.cam-logo{display:block;width:auto;height:90px;max-width:none;border:0;border-radius:0;background:none;box-shadow:none;transition:height .3s ease}",
     "$S #header.cam-solid #header_branding img.cam-logo{height:60px}",
@@ -146,6 +148,10 @@
 
     "@media (max-width:1024px){",
     "$S #header_branding img.cam-logo{height:44px}",
+    /* the theme fixes the phone header at 50px; let it fit the logo, and use
+       the same 22px side margin as the page below */
+    "$S #header{height:auto;min-height:0}",
+    "$S #header .header-wrapper{height:auto;grid-template-rows:auto;padding:12px 22px;box-sizing:border-box}",
     "$S #header.cam-solid #header_branding img.cam-logo{height:40px}",
     "$S .cs-mobile-menu-open{color:inherit}",
     "$S .site-nav-wrapper a{font-family:{sans}}",
