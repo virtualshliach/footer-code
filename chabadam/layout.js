@@ -19,7 +19,7 @@
    ========================================================================== */
 (function () {
   "use strict";
-  var VERSION = "2.3.4";
+  var VERSION = "2.3.5";
   if (window.CAM_LAYOUT) return;
   window.CAM_LAYOUT = VERSION;
 
@@ -382,6 +382,12 @@
     "$H .cam-info small,$H .cam-info .when_to_light{display:block;float:none;font-family:{sans};font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:{muted}}",
     "$H .cam-info .float_left,$H .cam-info .float_right{float:none}",
     "$H .cam-info .candlelighting .float_left img,$H .cam-info .candlelighting .button_container{display:none}",
+    /* line everything in Shabbat & Holidays up with its heading: the theme indents
+       the block (horizontal_padding) and leaves room for its candle icon */
+    "$H .cam-info .candlelighting .horizontal_padding > div.float_left:first-child{display:none}",
+    "$H .cam-info .candlelighting .widget_content *{margin-left:0;padding-left:0;text-indent:0}",
+    "$H .cam-info .candlelighting .horizontal_padding{padding-right:0}",
+    "$H .cam-info .candlelighting .vertical_padding{padding-top:0}",
     "$H .cam-info .times_wrapper{height:auto;overflow:visible}",
     "$H .cam-info .bold.large{font-family:{serif};font-weight:400;font-size:28px;color:{navy}}",
     "$H .cam-info a{color:{navy};text-decoration:none}",
@@ -631,8 +637,8 @@
     }
     $(".cam-prev", sec).addEventListener("click", function () { show(idx - 1); schedule(); });
     $(".cam-next", sec).addEventListener("click", function () { show(idx + 1); schedule(); });
-    sec.addEventListener("mouseenter", function () { paused = true; clearTimeout(timer); if (barI) barI.className = ""; });
-    sec.addEventListener("mouseleave", function () { paused = false; restartBar(); schedule(); });
+    /* no pause on hover: on desktop the hero fills most of the screen, so the
+       mouse is nearly always over it and the slides would never move */
     if (slides.length < 2) $(".cam-hctl", sec).style.display = "none";
     show(0);
     schedule();
