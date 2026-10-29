@@ -9,7 +9,8 @@
                 programs list + picture (from the homepage Programs box,
                   subtitle shown under the picture) ->
                 upcoming events (read from the Upcoming Events page) ->
-                get-involved band -> Instagram -> photo mosaic ->
+                about (photo slideshow from Latest Photos + mission) ->
+                Instagram ->
                 Shabbat & Holidays / Daily Thought -> mailing-list card.
               Live widgets (Instagram, photos, Shabbat times, daily thought,
               mailing-list form) are MOVED, not copied, so they keep working.
@@ -19,7 +20,7 @@
    ========================================================================== */
 (function () {
   "use strict";
-  var VERSION = "2.3.5";
+  var VERSION = "2.4.0";
   if (window.CAM_LAYOUT) return;
   window.CAM_LAYOUT = VERSION;
 
@@ -281,6 +282,47 @@
     "$H .cam-prog .cam-plist .cam-arr{opacity:1;transform:none}",
     "$H .cam-prog .cam-plist a{padding:14px 0;gap:18px}",
     "$H .cam-prog .cam-plist li.is-on .cam-ptitle{transform:none;color:{navy}}",
+    "}"
+  ];
+
+  /* ---- about: square photo slideshow + mission panel (replaces the
+     get-involved band and the Latest Photos grid) ------------------------- */
+  var ABOUT = {
+    /* non-breaking hyphen keeps "Allen-McKinney" on one line */
+    title: "Chabad of Allen" + String.fromCharCode(8209) + "McKinney is a place where every Jew can feel at home.",
+    text: "A center for Jewish discovery where curiosity is welcomed and Judaism is celebrated with joy and depth. " +
+      "With opportunities to expand the mind, inspire the heart and nourish the soul, we offer meaningful " +
+      "experiences for all ages, whatever your background or affiliation.",
+    sign: "Rabbi Eli " + String.fromCharCode(38) + " Nechama Newman",
+    btn: "About us",
+    href: "/templates/articlecco_cdo/aid/6593070/jewish/About.htm"
+  };
+  var ABOUT_MS = 5000;     /* photo slideshow: time each photo stays */
+  var CSS_ABOUT = [
+    "$H .cam-about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background-color:{navy};color:#fff}",
+    "$H .cam-about .cam-apics{position:relative;aspect-ratio:1/1;overflow:hidden;background-color:{navyDeep}}",
+    "$H .cam-about .cam-apic{position:absolute;top:0;right:0;bottom:0;left:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity 1.6s ease}",
+    "$H .cam-about .cam-apic.is-on{opacity:1}",
+    "$H .cam-about .cam-apanel{display:flex;flex-direction:column;justify-content:center;padding:72px max(40px,calc((100vw - 1180px) / 2 + 40px)) 72px 72px}",
+    "$H .cam-about .cam-aicon{display:block;color:{goldLight};margin:0 0 26px}",
+    "$H .cam-about .cam-atitle{font-family:{serif};font-weight:300;font-size:44px;line-height:1.12;letter-spacing:-.015em;color:#fff;margin:0 0 26px;max-width:620px}",
+    "$H .cam-about .cam-atext{font-family:{serif};font-weight:300;font-size:19px;line-height:1.7;color:rgba(255,255,255,.8);margin:0 0 30px;max-width:600px}",
+    "$H .cam-about .cam-asign{display:flex;align-items:center;gap:18px;font-family:{serif};font-style:italic;font-size:19px;color:{goldLight};margin:0 0 36px}",
+    "$H .cam-about .cam-asign:before{content:'';display:block;width:40px;height:1px;background-color:{goldLight}}",
+    "$H .cam-about .cam-btn{align-self:flex-start;color:#fff;border-color:rgba(255,255,255,.55)}",
+    "$H .cam-about .cam-btn:hover{background-color:#fff;color:{navy};border-color:#fff}",
+    "$H .cam-about .cam-ahold{display:none}",
+    "@media (max-width:1100px){",
+    "$H .cam-about .cam-apanel{padding:56px 48px}",
+    "$H .cam-about .cam-atitle{font-size:36px}",
+    "}",
+    "@media (max-width:767px){",
+    "$H .cam-about{grid-template-columns:1fr}",
+    "$H .cam-about .cam-apanel{padding:40px 22px 48px}",
+    "$H .cam-about .cam-aicon{margin-bottom:18px}",
+    "$H .cam-about .cam-atitle{font-size:30px;margin-bottom:18px}",
+    "$H .cam-about .cam-atext{font-size:17px;margin-bottom:24px}",
+    "$H .cam-about .cam-asign{font-size:17px;margin-bottom:28px}",
     "}"
   ];
 
@@ -727,6 +769,63 @@
     return sec;
   }
 
+  function peopleIcon() {
+    return '<svg class="cam-aicon" viewBox="0 0 64 48" width="64" height="48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">' +
+      '<circle cx="32" cy="12" r="7"/><path d="M18 44c0-9 6.3-15 14-15s14 6 14 15"/>' +
+      '<circle cx="12" cy="18" r="5"/><path d="M2 42c0-6.6 4.5-11 10-11 2.4 0 4.6.8 6.3 2.3"/>' +
+      '<circle cx="52" cy="18" r="5"/><path d="M62 42c0-6.6-4.5-11-10-11-2.4 0-4.6.8-6.3 2.3"/></svg>';
+  }
+
+  /* The theme fills the Latest Photos widget after the page loads, so the
+     widget is kept (hidden) inside this section and its photos are picked up
+     as they arrive. Each photo is cropped to the square by background-size
+     cover, so a photo of any shape fills it with no empty space. */
+  function buildAbout(photos) {
+    var sec = el("section", "cam-about");
+    var about = $$("#tabContentMain a.parent").filter(function (a) { return /^\s*about\s*$/i.test(txt(a)); })[0];
+    var href = about ? attr(about, "href") : ABOUT.href;
+    sec.innerHTML = '<div class="cam-apics" aria-hidden="true"></div>' +
+      '<div class="cam-apanel">' + peopleIcon() +
+      '<h2 class="cam-atitle">' + esc(ABOUT.title) + "</h2>" +
+      '<p class="cam-atext">' + esc(ABOUT.text) + "</p>" +
+      '<p class="cam-asign">' + esc(ABOUT.sign) + "</p>" +
+      '<a class="cam-btn" href="' + esc(href) + '">' + esc(ABOUT.btn) + " " + longArrow() + "</a></div>" +
+      '<div class="cam-ahold"></div>';
+    var box = $(".cam-apics", sec);
+    if (photos && photos.node) $(".cam-ahold", sec).appendChild(photos.node);
+    var urls = [], cur = -1, timer = null, tries = 0;
+    function collect() {
+      var root = photos && photos.node;
+      if (!root) return;
+      $$("li img", root).forEach(function (im) {
+        var u = imgUrl(im);
+        if (u && urls.indexOf(u) < 0) {
+          urls.push(u);
+          var d = el("div", "cam-apic");
+          d.style.backgroundImage = "url('" + u.replace(/'/g, "%27") + "')";
+          box.appendChild(d);
+        }
+      });
+    }
+    function show(i) {
+      var pics = $$(".cam-apic", box);
+      if (!pics.length) return;
+      cur = i % pics.length;
+      pics.forEach(function (p, k) { p.className = "cam-apic" + (k === cur ? " is-on" : ""); });
+    }
+    function wait() {
+      collect();
+      if (urls.length) {
+        show(0);
+        if (!REDUCED) timer = setInterval(function () { collect(); show(cur + 1); }, ABOUT_MS);
+        return;
+      }
+      if (++tries < 40) setTimeout(wait, 500);
+    }
+    wait();
+    return sec;
+  }
+
   function buildPhotos(d) {
     var sec = el("section", "cam-sec cam-photos");
     sec.innerHTML = '<div class="cam-in"><div class="cam-head"><div>' +
@@ -1078,9 +1177,10 @@
     var ev = el("section", "cam-sec cam-events");
     ev.hidden = true;
     home.appendChild(ev);
-    if (d.band && d.band.length) home.appendChild(buildBand(d.band));
+    /* the get-involved band and the Latest Photos grid are replaced by the
+       about section, which shows those photos one at a time */
+    home.appendChild(buildAbout(d.photos));
     if (d.insta) home.appendChild(buildInsta(d.insta, socialIg));
-    if (d.photos) home.appendChild(buildPhotos(d.photos));
     /* quick links and the learning feature are left off the homepage (v2.1.0) */
     if (d.rows.length) home.appendChild(buildMore(d.rows));
     if (d.info && d.info.length) home.appendChild(buildInfo(d.info));
@@ -1182,7 +1282,7 @@
     try {
       addFonts();
       var blocks = [CSS_HEADER, CSS_INNER, CSS_FOOTER];
-      if (IS_HOME) blocks = blocks.concat([CSS_HOME, CSS_HERO, CSS_PROGRAMS, CSS_EVENTS, CSS_BAND, CSS_MID, CSS_INFO, CSS_PHONE_TIGHT]);
+      if (IS_HOME) blocks = blocks.concat([CSS_HOME, CSS_HERO, CSS_PROGRAMS, CSS_EVENTS, CSS_ABOUT, CSS_BAND, CSS_MID, CSS_INFO, CSS_PHONE_TIGHT]);
       var css = [];
       for (var i = 0; i < blocks.length; i++) css.push(fill(blocks[i]));
       addStyle("cam-style", important(css.join("\n")) + "\n" + CSS_RAW);

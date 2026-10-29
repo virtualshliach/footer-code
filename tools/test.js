@@ -86,13 +86,16 @@ var SITES = {
     ok(r.errors.length === 0, 'no console errors ' + (r.errors.length ? JSON.stringify(r.errors) : ''));
     ok(r.logs.some(function (l) { return /\[footer-code\/chabadam\].* preview -> layout\.js/.test(l); }), 'loader log line');
     ok(r.logs.some(function (l) { return /CAM layout v[\d.]+: running on homepage/.test(l); }), 'layout log line');
-    ['cam-hero', 'cam-prog', 'cam-band', 'cam-info', 'cam-mail'].forEach(function (c) {
+    ['cam-hero', 'cam-prog', 'cam-about', 'cam-info', 'cam-mail'].forEach(function (c) {
       ok(r.d.querySelector('.cam-home .' + c), 'section .' + c);
     });
     ok(r.d.querySelectorAll('.cam-plist li').length === 6, 'six programs listed');
     ok(r.d.querySelector('.cam-pcap p') && /Evenings of learning/.test(r.d.querySelector('.cam-pcap p').textContent), 'program subtitle shown under the picture');
     ok(r.d.querySelector('img.cam-logo') && /^data:image\/png/.test(r.d.querySelector('img.cam-logo').getAttribute('src')), 'logo in header');
     ok(r.d.querySelector('.cam-footer'), 'footer rebuilt');
+    ok(!r.d.querySelector('.cam-band') && !r.d.querySelector('.cam-photos'), 'old band and photo grid replaced');
+    ok(r.d.querySelectorAll('.cam-about .cam-apic').length >= 2 && r.d.querySelector('.cam-about .cam-apic.is-on'), 'about slideshow uses the Latest Photos (' + r.d.querySelectorAll('.cam-about .cam-apic').length + ')');
+    ok(/Newman/.test(r.d.querySelector('.cam-about .cam-asign').textContent), 'about signature');
     ok(r.d.querySelector('.cam-events') && r.d.querySelector('.cam-events').hidden, 'events section waits hidden when the events page cannot load');
 
     console.log('chabadam: preview inner page');
