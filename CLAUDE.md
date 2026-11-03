@@ -15,8 +15,8 @@ real visitors within ~10 minutes (Pages caches for 10 min). Treat `main` as prod
   project from `PAGES` unless Yudell says to.
 - `_template/footer.js` is the starting loader for a new site.
 - `chabadam/footer.js` also has `EVERY` (files loaded on every page) and `LIVE`.
-  While `LIVE` is false the redesign shows only in browsers opened with `?preview=1`
-  (`?preview=0` turns it off). Set `LIVE = true` only when Yudell says go live.
+  `LIVE` is true (went live 2026-11-03): every visitor gets the redesign. Setting it
+  back to false hides it again except in browsers opened with `?preview=1`.
   `chabadam/layout.js` is the readable source; there is no separate build step.
 - `tools/` holds tests; `tools/node_modules` is git-ignored.
 

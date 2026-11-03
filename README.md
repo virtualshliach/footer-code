@@ -21,7 +21,7 @@ load on every page (`EVERY`, used for a whole-site redesign).
 | Folder | Site | Projects |
 |---|---|---|
 | `riverside/` | jewishriverside.com | `chanukah-2026.js` (draft, page 7553387), `sukkot-5787.js` (page 7457011) |
-| `chabadam/` | chabadam.org | `layout.js` (site redesign, every page; preview-only until `LIVE = true`) |
+| `chabadam/` | chabadam.org | `layout.js` (site redesign, every page; live) |
 
 ## Adding a site
 

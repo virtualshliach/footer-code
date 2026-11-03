@@ -72,11 +72,13 @@ var CAM_INNER = '<!doctype html><html><head><title>t</title></head><body class="
 var SITES = {
   chabadam: async function () {
     var HOME = 'https://www.chabadam.org/';
-    console.log('chabadam: site redesign stays off for visitors until LIVE');
-    var off = await load('chabadam', HOME, { shell: CAM_HOME, wait: 400 });
-    ok(projectRequests(off).length === 0, 'plain visit: nothing loaded');
-    ok(!off.d.getElementById('cam-cover'), 'plain visit: homepage not covered');
-    ok(!/cam-home/.test(off.d.body.className) && !off.errors.length, 'plain visit: current site untouched');
+    console.log('chabadam: site redesign is live for every visitor');
+    var off = await load('chabadam', HOME, { shell: CAM_HOME, wait: 1500 });
+    ok(projectRequests(off).length === 1 && /chabadam\/layout\.js\?v=/.test(projectRequests(off)[0]), 'plain visit: layout.js loaded');
+    ok(/(^|\s)cam-home(\s|$)/.test(off.d.body.className) && !off.errors.length, 'plain visit: homepage rebuilt');
+    ok(off.logs.some(function (l) { return /\[footer-code\/chabadam\].* live -> layout\.js/.test(l); }), 'loader says live');
+    var wa = off.d.querySelector('.cam-footer .cam-social a[href*="wa.me"]');
+    ok(wa && wa.getAttribute('href') === 'https://wa.me/14693684152', 'footer WhatsApp goes to 469-368-4152');
 
     console.log('chabadam: preview homepage (?preview=1)');
     var r = await load('chabadam', HOME + '?preview=1', { shell: CAM_HOME, wait: 1500 });
@@ -84,7 +86,7 @@ var SITES = {
     ok(/(^|\s)cam-home(\s|$)/.test(r.d.body.className), 'homepage rebuilt');
     ok(!r.d.getElementById('cam-cover'), 'homepage cover removed after build');
     ok(r.errors.length === 0, 'no console errors ' + (r.errors.length ? JSON.stringify(r.errors) : ''));
-    ok(r.logs.some(function (l) { return /\[footer-code\/chabadam\].* preview -> layout\.js/.test(l); }), 'loader log line');
+    ok(r.logs.some(function (l) { return /\[footer-code\/chabadam\].* live -> layout\.js/.test(l); }), 'loader log line');
     ok(r.logs.some(function (l) { return /CAM layout v[\d.]+: running on homepage/.test(l); }), 'layout log line');
     ['cam-hero', 'cam-prog', 'cam-about', 'cam-info', 'cam-mail'].forEach(function (c) {
       ok(r.d.querySelector('.cam-home .' + c), 'section .' + c);
@@ -105,7 +107,7 @@ var SITES = {
     ok(inner.d.querySelector('.cam-footer') && !inner.d.querySelector('.cam-home'), 'inner page: header and footer only');
 
     var gone = await load('chabadam', HOME + '?preview=0', { shell: CAM_HOME, wait: 300 });
-    ok(projectRequests(gone).length === 0, '?preview=0: nothing loaded');
+    ok(projectRequests(gone).length === 1, '?preview=0: still loads once live');
     var resp = await load('chabadam', 'https://www.chabadam.org/templates/ArticleCcoResponse/aid/7494889/jewish/x.htm?preview=1', { shell: CAM_INNER, wait: 300 });
     ok(projectRequests(resp).length === 0, 'form thank-you pages left alone');
   },

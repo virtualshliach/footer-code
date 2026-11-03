@@ -8,12 +8,12 @@
 (function () {
   'use strict';
   var SITE = 'chabadam';
-  var V = '2026-10-29a';
+  var V = '2026-11-03a';
 
   /* Site redesign. While LIVE is false only browsers that opened the site with
      ?preview=1 see it (remembered in that browser; ?preview=0 turns it off).
      Visitors see the current site. Set LIVE to true to switch everyone over. */
-  var LIVE = false;
+  var LIVE = true;
   var EVERY = [
     { file: 'layout.js', homeCover: true }
   ];
