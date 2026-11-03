@@ -43,7 +43,7 @@ function load(site, url, opts) {
   opts = opts || {};
   var errors = [], logs = [], requests = [];
   var html = (opts.shell || SHELL) + (opts.coScript || '') +
-    '<script src="' + PAGES_BASE + site + '/footer.js"></script></body></html>';
+    (opts.footer || '<script src="' + PAGES_BASE + site + '/footer.js"></script>') + '</body></html>';
   var dom = new JSDOM(html, {
     url: url, runScripts: 'dangerously', resources: makeLoader(requests), pretendToBeVisual: true,
     beforeParse: function (w) {
@@ -79,6 +79,16 @@ var SITES = {
     ok(off.logs.some(function (l) { return /\[footer-code\/chabadam\].* live -> layout\.js/.test(l); }), 'loader says live');
     var wa = off.d.querySelector('.cam-footer .cam-social a[href*="wa.me"]');
     ok(wa && wa.getAttribute('href') === 'https://wa.me/14693684152', 'footer WhatsApp goes to 469-368-4152');
+
+    console.log('chabadam: through the cache-proof footer line (footer-line.html)');
+    var LINE = fs.readFileSync(path.join(ROOT, 'chabadam', 'footer-line.html'), 'utf8');
+    var fl = await load('chabadam', HOME, { shell: CAM_HOME, footer: LINE, wait: 1500 });
+    ok(fl.requests.some(function (u) { return /chabadam\/footer\.js\?t=\d+$/.test(u); }), 'line asks for a fresh loader (minute stamp)');
+    ok(projectRequests(fl).some(function (u) { return /chabadam\/layout\.js\?v=/.test(u); }), 'loader then fetched layout.js');
+    ok(/(^|\s)cam-home(\s|$)/.test(fl.d.body.className) && !fl.errors.length, 'homepage rebuilt through the line');
+    ok(!fl.d.getElementById('cam-cover'), 'cover removed after build');
+    var flInner = await load('chabadam', 'https://www.chabadam.org/templates/articlecco_cdo/aid/6780908/jewish/Services.htm', { shell: CAM_INNER, footer: LINE, wait: 900 });
+    ok(flInner.d.querySelector('.cam-footer') && !flInner.d.getElementById('cam-cover') && !flInner.errors.length, 'inner page through the line: no cover, footer rebuilt');
 
     console.log('chabadam: preview homepage (?preview=1)');
     var r = await load('chabadam', HOME + '?preview=1', { shell: CAM_HOME, wait: 1500 });

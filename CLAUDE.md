@@ -9,6 +9,9 @@ real visitors within ~10 minutes (Pages caches for 10 min). Treat `main` as prod
 - One folder per client site (`riverside/`, ...). Nothing is shared between sites.
 - `<site>/footer.js` is the loader. It is the ONLY URL pasted into that site's
   ChabadOne footer, once, and must never be renamed or moved.
+  chabadam pastes `chabadam/footer-line.html` instead of a plain script tag: it adds a
+  minute stamp to the loader URL so browsers and the Pages cache never serve a stale
+  loader (plain tags can serve the old loader for up to 10 minutes after a push).
 - `<site>/<project>.js` are project files, loaded by the loader only on the page ids
   listed in its `PAGES` map.
 - Past events stay ON (their pages must keep their design). Do not remove a
@@ -43,4 +46,4 @@ real visitors within ~10 minutes (Pages caches for 10 min). Treat `main` as prod
 | Folder | Site | Footer line |
 |---|---|---|
 | riverside | jewishriverside.com | `<script src="https://virtualshliach.github.io/footer-code/riverside/footer.js"></script>` |
-| chabadam | chabadam.org | `<script src="https://virtualshliach.github.io/footer-code/chabadam/footer.js"></script>` |
+| chabadam | chabadam.org | the one-line script in `chabadam/footer-line.html` (asks for a fresh `footer.js` every minute, so updates show within a minute instead of up to 10) |
