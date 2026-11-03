@@ -103,6 +103,8 @@ var SITES = {
     });
     ok(r.d.querySelectorAll('.cam-plist li').length === 6, 'six programs listed');
     ok(r.d.querySelector('.cam-pcap p') && /Evenings of learning/.test(r.d.querySelector('.cam-pcap p').textContent), 'program subtitle shown under the picture');
+    var wl = [].slice.call(r.d.querySelectorAll('.cam-plist a')).filter(function (x) { return /women/i.test(x.textContent); })[0];
+    ok(wl && wl.getAttribute('href') === '/templates/articlecco_cdo/aid/7247052/jewish/Jewish-Womens-Circle.htm', 'program links set by name (women -> JWC page)');
     ok(r.d.querySelector('img.cam-logo') && /^data:image\/png/.test(r.d.querySelector('img.cam-logo').getAttribute('src')), 'logo in header');
     ok(r.d.querySelector('.cam-footer'), 'footer rebuilt');
     ok(!r.d.querySelector('.cam-band') && !r.d.querySelector('.cam-photos'), 'old band and photo grid replaced');

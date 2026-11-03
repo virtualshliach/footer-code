@@ -20,7 +20,7 @@
    ========================================================================== */
 (function () {
   "use strict";
-  var VERSION = "2.4.1";
+  var VERSION = "2.4.2";
   if (window.CAM_LAYOUT) return;
   window.CAM_LAYOUT = VERSION;
 
@@ -562,7 +562,7 @@
           title: txt($(".sneak-peek-container .header-title", row)) || "Programs",
           items: $$(".sneak_peek", row).map(function (w) {
             var a = $("h6 a", w) || $("a", w);
-            return { title: txt(a), href: attr(a, "href"), img: imgUrl($(".thumbnail img", w)), desc: progDesc(w) };
+            return { title: txt(a), href: progLink(txt(a), attr(a, "href")), img: imgUrl($(".thumbnail img", w)), desc: progDesc(w) };
           }).filter(function (x) { return x.title; })
         };
         used = true;
@@ -691,6 +691,23 @@
 
   /* a program's subtitle (ChabadOne's subtitle field): any text the item
      holds besides its title and its picture */
+  /* Program links, matched by program name. These win over the links saved in
+     the ChabadOne Programs box (which pointed at the wrong pages). */
+  var PROGRAM_LINKS = [
+    [/women/i, "/templates/articlecco_cdo/aid/7247052/jewish/Jewish-Womens-Circle.htm"],
+    [/mensch/i, "/templates/articlecco_cdo/aid/7247061/jewish/The-Mensch-Club.htm"],
+    [/c-?teen/i, "/templates/articlecco_cdo/aid/7248580/jewish/CTeen.htm"],
+    [/adult|learning/i, "/templates/articlecco_cdo/aid/7523446/jewish/Adult-Education.htm"],
+    [/hebrew\s*school/i, "/templates/articlecco_cdo/aid/7247070/jewish/Youth-Programs.htm"],
+    [/mommy/i, "/templates/articlecco_cdo/aid/7298465/jewish/Contact-Us.htm"]
+  ];
+  function progLink(title, href) {
+    for (var i = 0; i < PROGRAM_LINKS.length; i++) {
+      if (PROGRAM_LINKS[i][0].test(title)) return PROGRAM_LINKS[i][1];
+    }
+    return href;
+  }
+
   function progDesc(w) {
     var box = $(".widget_content", w) || w;
     var known = $(".subtitle, .sub_title, .synopsis, .description, .item-subtitle", box);
