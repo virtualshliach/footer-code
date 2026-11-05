@@ -159,6 +159,8 @@ var SITES = {
     ok(C.decode('not-a-card') === null && C.decode(C.encode({ d: 'evil' })).d === 'night', 'bad card links are rejected or cleaned');
     var got = await load('chabadam', HC_URL + '?preview=1#card=' + C.encode({ t: 'Sarah', m: 'Hi', f: 'Eli', d: 'sky' }), { shell: HC_SHELL, wait: 1500 });
     ok(got.d.querySelector('#hc-dlg.is-open .hc-card.d-sky'), 'a shared card link opens the card');
+    var rw = await load('chabadam', 'https://www.chabadam.org/templates/articlecco_cdo/aid/7559974/jewish/Chanukah-Events.htm/preview/1', { shell: HC_SHELL, wait: 1500 });
+    ok(rw.d.getElementById('hc') && !rw.errors.length, 'preview also works when ChabadOne rewrites it to /preview/1');
     await load('chabadam', HOME + '?preview=0', { shell: CAM_HOME, wait: 200 });
   },
   riverside: async function () {

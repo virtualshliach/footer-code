@@ -8,7 +8,7 @@
 (function () {
   'use strict';
   var SITE = 'chabadam';
-  var V = '2026-11-05a';
+  var V = '2026-11-05b';
 
   /* Site redesign. While LIVE is false only browsers that opened the site with
      ?preview=1 see it (remembered in that browser; ?preview=0 turns it off).
@@ -31,7 +31,9 @@
   var PREVIEW_KEY = 'fc-' + SITE + '-preview';
 
   function previewOn() {
-    var q = /[?&]preview=([01])(?:&|#|$)/.exec(window.location.search);
+    /* ?preview=1, or /preview/1 (ChabadOne rewrites ?x=y into /x/y on article pages) */
+    var q = /[?&]preview=([01])(?:&|#|$)/.exec(window.location.search) ||
+            /\/preview\/([01])(?:[\/.]|$)/i.exec(window.location.pathname);
     try {
       if (q) {
         if (q[1] === '1') window.localStorage.setItem(PREVIEW_KEY, '1');
