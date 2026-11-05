@@ -122,6 +122,44 @@ var SITES = {
     ok(projectRequests(gone).length === 1, '?preview=0: still loads once live');
     var resp = await load('chabadam', 'https://www.chabadam.org/templates/ArticleCcoResponse/aid/7494889/jewish/x.htm?preview=1', { shell: CAM_INNER, wait: 300 });
     ok(projectRequests(resp).length === 0, 'form thank-you pages left alone');
+
+    console.log('chabadam: Chanukah page (aid 7559974), preview only');
+    var HC_URL = 'https://www.chabadam.org/templates/articlecco_cdo/aid/7559974/jewish/Chanukah-Events.htm';
+    var HC_SHELL = CAM_INNER.replace('<div id="content">Article</div>',
+      '<div id="content"><div id="BodyContainer" class="wrapper"><h1>Chanukah Events</h1><div class="co_body">old page</div></div></div>');
+    await load('chabadam', HOME + '?preview=0', { shell: CAM_HOME, wait: 200 });
+    var hcOff = await load('chabadam', HC_URL, { shell: HC_SHELL, wait: 900 });
+    ok(!projectRequests(hcOff).some(function (u) { return /chanukah-2026/.test(u); }) && !hcOff.d.getElementById('hc') && !hcOff.d.getElementById('fc-cover'),
+      'plain visitors: old Chanukah page untouched, no cover');
+    var hc = await load('chabadam', HC_URL + '?preview=1', { shell: HC_SHELL, wait: 1500 });
+    ok(projectRequests(hc).some(function (u) { return /chabadam\/chanukah-2026\.js\?v=/.test(u); }), '?preview=1: chanukah-2026.js loaded');
+    ok(hc.d.getElementById('hc') && /hc-on/.test(hc.d.body.className), 'new page mounted');
+    ok(!hc.d.getElementById('fc-cover'), 'cover removed after mount');
+    ok(hc.errors.length === 0, 'no console errors ' + (hc.errors.length ? JSON.stringify(hc.errors) : ''));
+    ok(hc.d.querySelector('.cam-footer'), 'site header/footer redesign still runs');
+    ['hc-events', 'hc-light', 'hc-recipes', 'hc-story', 'hc-dreidel', 'hc-cards', 'hc-sponsor'].forEach(function (id) {
+      ok(hc.d.getElementById(id), 'section #' + id);
+    });
+    ok(hc.d.querySelectorAll('.hc-ev').length === 3, 'three events');
+    ok(hc.d.querySelector('.hc-ev a[href="https://www.eventbrite.com/e/2003755791512"]'), 'Light Up Allen RSVP link');
+    ok(hc.d.querySelectorAll('.hc-nights button').length === 8, 'eight nights in the guide');
+    var b3 = hc.d.querySelector('.hc-nights button[data-n="3"]'); b3.click();
+    ok(hc.d.querySelectorAll('#hcGuideM .hc-cand.has').length === 3, 'night 3: three candles placed');
+    var placed = [].slice.call(hc.d.querySelectorAll('#hcGuideM .hc-cand.has')).map(function (g) { return +g.getAttribute('data-slot'); });
+    ok(placed.join() === '5,6,7', 'candles placed from the right');
+    ok(hc.d.querySelector('.hc-first').classList.contains('is-off'), 'Shehecheyanu hidden after the first night');
+    hc.d.querySelector('.hc-rc[data-r="latkes"]').click();
+    var dl = hc.d.getElementById('hc-dlg');
+    ok(dl && /2 lb/.test(dl.textContent), 'latke recipe opens on the page');
+    dl.querySelector('.hc-scale button[data-k="+"]').click(); dl.querySelector('.hc-scale button[data-k="+"]').click();
+    ok(/2 2\/3 lb/.test(dl.textContent) && dl.querySelector('.hc-scale output').textContent === '8', 'recipe scales to 8 servings');
+    var C = hc.w.HC2026_card;
+    var round = C.decode(C.encode({ t: 'Sarah', m: 'Chag sameach חג שמח', f: 'Eli', d: 'gold' }));
+    ok(round && round.t === 'Sarah' && /חג/.test(round.m) && round.d === 'gold', 'card link encodes and decodes (with Hebrew)');
+    ok(C.decode('not-a-card') === null && C.decode(C.encode({ d: 'evil' })).d === 'night', 'bad card links are rejected or cleaned');
+    var got = await load('chabadam', HC_URL + '?preview=1#card=' + C.encode({ t: 'Sarah', m: 'Hi', f: 'Eli', d: 'sky' }), { shell: HC_SHELL, wait: 1500 });
+    ok(got.d.querySelector('#hc-dlg.is-open .hc-card.d-sky'), 'a shared card link opens the card');
+    await load('chabadam', HOME + '?preview=0', { shell: CAM_HOME, wait: 200 });
   },
   riverside: async function () {
     var DRAFT = '7553387';

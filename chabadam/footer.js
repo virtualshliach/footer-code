@@ -8,7 +8,7 @@
 (function () {
   'use strict';
   var SITE = 'chabadam';
-  var V = '2026-11-03b';
+  var V = '2026-11-05a';
 
   /* Site redesign. While LIVE is false only browsers that opened the site with
      ?preview=1 see it (remembered in that browser; ?preview=0 turns it off).
@@ -20,9 +20,10 @@
 
   /* page id (aid) -> project. file: name in this folder.
      cover: background color to hold the page while the project loads (optional).
-     onResponse: also load on the form's thank-you (response) page (optional). */
+     onResponse: also load on the form's thank-you (response) page (optional).
+     preview: only load for browsers opened with ?preview=1 (draft pages). */
   var PAGES = {
-    /* '1234567': { file: 'project-name.js', cover: '#ffffff' } */
+    '7559974': { file: 'chanukah-2026.js', cover: '#0B1A33', preview: true }   /* Chanukah Events */
   };
 
   var href = window.location.href;
@@ -102,6 +103,7 @@
   var page = aid && Object.prototype.hasOwnProperty.call(PAGES, aid) ? PAGES[aid] : null;
   if (!page) return;
   if (isResponse && !page.onResponse) return;
+  if (page.preview && !previewOn()) return;
 
   var coverId = page.coverId || 'fc-cover';
   if (page.cover && !isResponse && !document.getElementById(coverId)) {
