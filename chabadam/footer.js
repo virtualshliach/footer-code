@@ -8,7 +8,7 @@
 (function () {
   'use strict';
   var SITE = 'chabadam';
-  var V = '2026-11-05e';
+  var V = '2026-11-05f';
 
   /* Site redesign. While LIVE is false only browsers that opened the site with
      ?preview=1 see it (remembered in that browser; ?preview=0 turns it off).
@@ -23,7 +23,7 @@
      onResponse: also load on the form's thank-you (response) page (optional).
      preview: only load for browsers opened with ?preview=1 (draft pages). */
   var PAGES = {
-    '7559974': { file: 'chanukah-2026.js', cover: '#0B1A33', preview: true }   /* Chanukah Events */
+    '7559974': { file: 'chanukah-2026.js', cover: '#0B1A33' }   /* Chanukah Events (live 2026-11-05) */
   };
 
   var href = window.location.href;

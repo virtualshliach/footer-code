@@ -123,15 +123,13 @@ var SITES = {
     var resp = await load('chabadam', 'https://www.chabadam.org/templates/ArticleCcoResponse/aid/7494889/jewish/x.htm?preview=1', { shell: CAM_INNER, wait: 300 });
     ok(projectRequests(resp).length === 0, 'form thank-you pages left alone');
 
-    console.log('chabadam: Chanukah page (aid 7559974), preview only');
+    console.log('chabadam: Chanukah page (aid 7559974), live for everyone');
     var HC_URL = 'https://www.chabadam.org/templates/articlecco_cdo/aid/7559974/jewish/Chanukah-Events.htm';
     var HC_SHELL = CAM_INNER.replace('<div id="content">Article</div>',
       '<div id="content"><div id="BodyContainer" class="wrapper"><h1>Chanukah Events</h1><div class="co_body">old page</div></div></div>');
-    await load('chabadam', HOME + '?preview=0', { shell: CAM_HOME, wait: 200 });
-    var hcOff = await load('chabadam', HC_URL, { shell: HC_SHELL, wait: 900 });
-    ok(!projectRequests(hcOff).some(function (u) { return /chanukah-2026/.test(u); }) && !hcOff.d.getElementById('hc') && !hcOff.d.getElementById('fc-cover'),
-      'plain visitors: old Chanukah page untouched, no cover');
-    var hc = await load('chabadam', HC_URL + '?preview=1', { shell: HC_SHELL, wait: 1500 });
+    var hcOff = await load('chabadam', HC_URL, { shell: HC_SHELL, wait: 1500 });
+    ok(projectRequests(hcOff).some(function (u) { return /chabadam\/chanukah-2026\.js\?v=/.test(u); }) && hcOff.d.getElementById('hc') && !hcOff.d.getElementById('fc-cover') && !hcOff.errors.length,
+      'plain visitors (no preview): new Chanukah page shown');    var hc = await load('chabadam', HC_URL + '?preview=1', { shell: HC_SHELL, wait: 1500 });
     ok(projectRequests(hc).some(function (u) { return /chabadam\/chanukah-2026\.js\?v=/.test(u); }), '?preview=1: chanukah-2026.js loaded');
     ok(hc.d.getElementById('hc') && /hc-on/.test(hc.d.body.className), 'new page mounted');
     ok(!hc.d.getElementById('fc-cover'), 'cover removed after mount');
