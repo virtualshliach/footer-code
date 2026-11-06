@@ -142,6 +142,7 @@ var SITES = {
     });
     ok(hc.d.querySelectorAll('.hc-ev').length === 3, 'three events');
     ok(hc.d.querySelector('.hc-ev a[href="https://www.eventbrite.com/e/2003755791512"]'), 'Light Up Allen RSVP link');
+    ok(!/\.hc-evimg\{[^}]*background:/.test(hc.d.getElementById('hc-style').textContent), 'flyer box style does not reset the flyer picture');
     ok(hc.d.querySelectorAll('.hc-nights button').length === 8, 'eight nights in the guide');
     var b3 = hc.d.querySelector('.hc-nights button[data-n="3"]'); b3.click();
     ok(hc.d.querySelectorAll('#hcGuideM .hc-cand.has').length === 3, 'night 3: three candles placed');

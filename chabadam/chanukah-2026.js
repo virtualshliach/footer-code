@@ -372,7 +372,7 @@
     '#hc .hc-evgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}',
     '#hc .hc-ev{display:flex;flex-direction:column;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 1px 0 rgba(20,52,94,.06),0 22px 50px rgba(20,52,94,.08);transition:transform .25s ease,box-shadow .25s ease}',
     '#hc .hc-ev:hover{transform:translateY(-4px);box-shadow:0 1px 0 rgba(20,52,94,.06),0 30px 60px rgba(20,52,94,.14)}',
-    '#hc .hc-evimg{position:relative;display:block;aspect-ratio:4/5;background:' + NIGHTC + ' center/cover no-repeat}',
+    '#hc .hc-evimg{position:relative;display:block;aspect-ratio:4/5;background-color:' + NIGHTC + ';background-position:center top;background-size:cover;background-repeat:no-repeat}',
     '#hc .hc-evdate{position:absolute;left:18px;top:18px;width:68px;padding:10px 0 9px;border-radius:14px;background:rgba(255,255,255,.95);text-align:center;color:' + NAVY + ';box-shadow:0 8px 20px rgba(0,0,0,.18)}',
     '#hc .hc-evdate small{display:block;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:' + GOLD + '}',
     '#hc .hc-evdate b{display:block;font-family:' + SERIF + ';font-size:32px;font-weight:400;line-height:1}',
