@@ -341,6 +341,7 @@
     '#hc .hc-tonight i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#FFC75A;box-shadow:0 0 12px #FFC75A}',
     '#hc .hc-hbtns{display:flex;flex-wrap:wrap;gap:12px}',
     '#hc .hc-hart{position:relative;align-self:end}',
+    '#hc .hc-hmini{display:none}',
     '#hc .hc-hart .hc-menorah{display:block;width:100%;max-width:560px;margin:0 auto -6px;filter:drop-shadow(0 30px 60px rgba(0,0,0,.45))}',
     '#hc .hc-hart:before{content:"";position:absolute;left:10%;right:10%;top:0;height:60%;background:radial-gradient(closest-side,rgba(255,190,90,.28),transparent);pointer-events:none}',
 
@@ -370,6 +371,10 @@
 
     /* events */
     '#hc .hc-evgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}',
+    '#hc .hc-swipe{display:none;align-items:center;justify-content:space-between;margin:0 0 4px;font-size:12.5px;font-weight:600;color:' + GOLD + '}',
+    '#hc .hc-dots{display:flex;gap:6px}',
+    '#hc .hc-dots i{width:7px;height:7px;border-radius:50%;background:rgba(20,52,94,.2);transition:all .25s ease}',
+    '#hc .hc-dots i.is-on{width:20px;border-radius:4px;background:' + NAVY + '}',
     '#hc .hc-ev{display:flex;flex-direction:column;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 1px 0 rgba(20,52,94,.06),0 22px 50px rgba(20,52,94,.08);transition:transform .25s ease,box-shadow .25s ease}',
     '#hc .hc-ev:hover{transform:translateY(-4px);box-shadow:0 1px 0 rgba(20,52,94,.06),0 30px 60px rgba(20,52,94,.14)}',
     '#hc .hc-evimg{position:relative;display:block;aspect-ratio:4/5;background-color:' + NIGHTC + ';background-position:center top;background-size:cover;background-repeat:no-repeat}',
@@ -561,14 +566,37 @@
     '}',
     '@media (max-width:767px){',
     '#hc .hc-in{padding:0 20px}',
-    '#hc .hc-sec{padding:60px 0}',
-    '#hc .hc-hero{padding-top:110px}',
-    '#hc .hc-h1{font-size:48px}',
-    '#hc .hc-hlede{font-size:17px}',
-    '#hc .hc-h2{font-size:36px}',
-    '#hc .hc-lede{font-size:16px;margin-bottom:28px}',
-    '#hc .hc-count div{min-width:0;flex:1;padding:12px 4px}',
-    '#hc .hc-count b{font-size:26px}',
+    '#hc .hc-sec{padding:44px 0}',
+    '#hc .hc-hero{padding-top:78px}',
+    '#hc .hc-hero .hc-eyebrow{font-size:10.5px;letter-spacing:.16em;margin-bottom:10px}',
+    '#hc .hc-htitle{display:flex;align-items:center;gap:10px;margin:0 0 14px}',
+    '#hc .hc-h1{font-size:40px;margin:0;flex:1 1 auto;min-width:0}',
+    '#hc .hc-hmini{display:block;flex:0 0 112px;position:relative}',
+    '#hc .hc-hmini:before{content:"";position:absolute;inset:-10% 0 30%;background:radial-gradient(closest-side,rgba(255,190,90,.3),transparent);pointer-events:none}',
+    '#hc .hc-hmini .hc-menorah{display:block;width:100%;height:auto}',
+    '#hc .hc-hart{display:none}',
+    '#hc .hc-hcopy{padding-bottom:34px}',
+    '#hc .hc-hlede{font-size:15.5px;line-height:1.55;margin:0 0 18px}',
+    '#hc .hc-count{gap:8px;margin:0 0 18px}',
+    '#hc .hc-count div{min-width:0;flex:1;padding:8px 2px;border-radius:12px}',
+    '#hc .hc-count b{font-size:22px}',
+    '#hc .hc-count span{font-size:9.5px;margin-top:4px}',
+    '#hc .hc-tonight{font-size:14px;margin:0 0 18px}',
+    '#hc .hc-hero .hc-hbtns{flex-wrap:nowrap;gap:8px}',
+    '#hc .hc-hero .hc-hbtns .hc-btn{flex:1 1 0;min-width:0;height:44px;padding:0 10px;font-size:11.5px;letter-spacing:.08em;white-space:nowrap}',
+    '#hc .hc-h2{font-size:32px;margin-bottom:10px}',
+    '#hc .hc-lede{font-size:15.5px;margin-bottom:22px}',
+    '#hc .hc-evgrid{display:flex;max-width:none;margin:0 -20px;padding:4px 20px 18px;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}',
+    '#hc .hc-evgrid::-webkit-scrollbar{display:none}',
+    '#hc .hc-ev{flex:0 0 82%;scroll-snap-align:center;opacity:1;transform:none}',
+    '#hc .hc-ev:hover{transform:none}',
+    '#hc .hc-evbody{padding:18px 18px 20px}',
+    '#hc .hc-evbody h3{font-size:23px}',
+    '#hc .hc-evbody p{font-size:14px;margin-bottom:14px}',
+    '#hc .hc-evmeta{font-size:13.5px;margin-bottom:16px}',
+    '#hc .hc-swipe{display:flex}',
+    '#hc .hc-sponsor{margin-top:22px;padding:24px 22px;gap:16px}',
+    '#hc .hc-sponsor h3{font-size:25px}',
     '#hc .hc-nights{grid-template-columns:repeat(4,minmax(0,1fr))}',
     '#hc .hc-rgrid{grid-template-columns:1fr}',
     '#hc .hc-chap{grid-template-columns:1fr}',
@@ -665,7 +693,7 @@
     return '<header class="hc-hero"><div class="hc-stars"></div><div class="hc-in hc-hgrid">' +
       '<div class="hc-hcopy">' +
       '<span class="hc-eyebrow">Chabad of Allen' + String.fromCharCode(8209) + 'McKinney · Chanukah 5787</span>' +
-      '<h1 class="hc-h1">Eight nights of <em>light</em></h1>' +
+      '<div class="hc-htitle"><h1 class="hc-h1">Eight nights of <em>light</em></h1><div class="hc-hmini">' + menorahSVG('hcHeroMini') + '</div></div>' +
       '<p class="hc-hlede">Celebrate with us across Allen and McKinney, and bring Chanukah home: light the menorah step by step, cook the classics, play dreidel and send a card, all right here.</p>' +
       '<div class="hc-hstate"></div>' +
       '<div class="hc-hbtns"><a class="hc-btn hc-btn-gold" href="#hc-events">See the events ' + ico('arrow', 16) + '</a>' +
@@ -698,6 +726,7 @@
     }).join('');
     return section('hc-events', '', '<div class="hc-in"><span class="hc-eyebrow">Celebrate together</span>' +
       '<h2 class="hc-h2">Chanukah events</h2><p class="hc-lede">Three community celebrations of the Festival of Lights. Chanukah begins Friday night, December 4.</p>' +
+      '<div class="hc-swipe"><span>Swipe to see all ' + EVENTS.length + ' events \u2192</span><span class="hc-dots">' + EVENTS.map(function (e, i) { return '<i' + (i ? '' : ' class="is-on"') + '></i>'; }).join('') + '</span></div>' +
       '<div class="hc-evgrid">' + cards + '</div>' +
       '<div class="hc-sponsor hc-rv" id="hc-sponsor"><div class="hc-sicon">' + ico('heart', 28) + '</div>' +
       '<div><h3>Sponsor a night of Chanukah</h3><p>Help light up Allen and McKinney. Your sponsorship brings the menorah, latkes, donuts and gelt to hundreds of families.</p></div>' +
@@ -808,15 +837,16 @@
   var app, dlg;
 
   function heroState() {
-    var box = $('.hc-hstate', app), svg = $('#hcHeroM', app);
+    var box = $('.hc-hstate', app), big = $('#hcHeroM', app), mini = $('#hcHeroMini', app);
+    var lightBoth = function (n, l, sh) { setMenorah(big, n, l, sh); setMenorah(mini, n, l, sh); };
     var cur = currentNight();
     if (cur.night >= 1 && cur.night <= 8) {
-      setMenorah(svg, cur.night, cur.night, true);
+      lightBoth(cur.night, cur.night, true);
       box.innerHTML = '<div class="hc-tonight"><i></i>' + (cur.tonight ? 'Tonight: light ' : 'Today: night ') +
         (cur.tonight ? cur.night + ' candle' + (cur.night > 1 ? 's' : '') + ' · ' + lightingNote(cur.night).short : cur.night + ' of Chanukah') + '</div>';
       return;
     }
-    setMenorah(svg, 8, 8, true);
+    lightBoth(8, 8, true);
     if (cur.night === 0) {
       var target = dateOfNight(1); target.setMinutes(sunsetMinutes(target) - 18);
       var tick = function () {
@@ -1115,6 +1145,16 @@
     rv.forEach(function (e) { io.observe(e); });
   }
 
+  function wireSwipe() {
+    var g = $('.hc-evgrid', app), dots = $$('.hc-dots i', app), cards = $$('.hc-ev', app);
+    if (!g || !dots.length) return;
+    g.addEventListener('scroll', function () {
+      var mid = g.scrollLeft + g.clientWidth / 2, best = 0, bd = 1e9;
+      cards.forEach(function (c, i) { var d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = i; } });
+      dots.forEach(function (d, i) { d.classList.toggle('is-on', i === best); });
+    }, { passive: true });
+  }
+
   function mount() {
     if ($('#hc')) return;
     var host = document.getElementById('content') || document.body;
@@ -1131,6 +1171,7 @@
     wireCards();
     receivedCard();
     wireNav();
+    wireSwipe();
     var cover = document.getElementById('fc-cover');
     if (cover && cover.parentNode) cover.parentNode.removeChild(cover);
     if (window.console) console.log('Chanukah 2026 page v' + VERSION + ': running');
